@@ -1,7 +1,7 @@
-from app import create_app
-
-app = create_app()
-
+import os
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    if os.environ.get("RENDER"):
+        app.run(host="0.0.0.0", port=10000)
+    else:
+        app.run(debug=True)
