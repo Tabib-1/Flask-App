@@ -8,12 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Poppins',sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
 body{
   height:100vh;
@@ -32,6 +27,7 @@ body{
   box-shadow:0 20px 50px rgba(0,0,0,0.2);
 }
 
+/* LEFT */
 .left{
   flex:1;
   background:#f4f6f9;
@@ -44,41 +40,10 @@ body{
   margin-bottom:30px;
 }
 
-.left h2{
-  margin-bottom:10px;
-}
+.left h2{margin-bottom:10px;}
+.left p{font-size:14px;color:gray;margin-bottom:20px;}
 
-.left p{
-  font-size:14px;
-  color:gray;
-  margin-bottom:20px;
-}
-
-.social{
-  display:flex;
-  gap:10px;
-  margin-bottom:20px;
-}
-
-.social button{
-  flex:1;
-  padding:10px;
-  border-radius:8px;
-  border:1px solid #ccc;
-  background:white;
-  cursor:pointer;
-}
-
-.divider{
-  text-align:center;
-  font-size:12px;
-  margin:15px 0;
-  color:gray;
-}
-
-.input-box{
-  margin-bottom:15px;
-}
+.input-box{margin-bottom:15px;}
 
 .input-box input{
   width:100%;
@@ -104,22 +69,12 @@ body{
   cursor:pointer;
 }
 
-.login-btn:hover{
-  background:#174aa0;
-}
+.login-btn:hover{background:#174aa0;}
 
-.bottom{
-  margin-top:15px;
-  font-size:13px;
-}
+.bottom{margin-top:15px;font-size:13px;}
+.bottom a{color:#1e5cc4;text-decoration:none;}
 
-.bottom a{
-  color:#1e5cc4;
-  text-decoration:none;
-}
-
-/* RIGHT SIDE (NO CHANGE EXCEPT BG + ANIMATION) */
-
+/* RIGHT */
 .right{
   flex:1;
   position:relative;
@@ -131,7 +86,6 @@ body{
   color:white;
 }
 
-/* EXACT IMAGE */
 .bg{
   position:absolute;
   width:100%;
@@ -140,7 +94,6 @@ body{
   z-index:0;
 }
 
-/* PARTICLE CANVAS */
 canvas{
   position:absolute;
   width:100%;
@@ -153,14 +106,14 @@ canvas{
   z-index:2;
 }
 
-/* SIGNATURE */
+/* SIGN */
 .signature{
   position:absolute;
   bottom:10px;
   right:20px;
   font-size:12px;
-  color:#555;
   letter-spacing:2px;
+  color:#555;
 }
 </style>
 </head>
@@ -169,21 +122,15 @@ canvas{
 
 <div class="container">
 
-<!-- LEFT SAME -->
+<!-- LEFT -->
 <div class="left">
-<div class="logo">dotwork</div>
+<div class="logo">Flask</div>
 
 <h2>Log in to your Account</h2>
-<p>Welcome back! Select method to log in:</p>
-
-<div class="social">
-<button>Google</button>
-<button>Facebook</button>
-</div>
-
-<div class="divider">or continue with email</div>
+<p>Welcome back! Please login to continue.</p>
 
 <form method="POST">
+
 <div class="input-box">
 <input type="email" placeholder="Email" required>
 </div>
@@ -198,14 +145,16 @@ canvas{
 </div>
 
 <button class="login-btn">Log in</button>
+
 </form>
 
 <div class="bottom">
 Don’t have an account? <a href="/register">Create an account</a>
 </div>
+
 </div>
 
-<!-- RIGHT SIDE -->
+<!-- RIGHT -->
 <div class="right">
 
 <img src="{{ url_for('static', filename='bg.jpg') }}" class="bg">
@@ -233,31 +182,50 @@ canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
 
 let particles = [];
+let mouse = {x:null,y:null};
 
 for(let i=0;i<180;i++){
   particles.push({
-    x: Math.random()*canvas.width,
-    y: canvas.height + Math.random()*200,
-    speed: 0.3 + Math.random()*1,
-    size: 1 + Math.random()*2,
-    color: ["#ff00ff","#00ffff","#ffff00","#ffffff"][Math.floor(Math.random()*4)]
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    vx:(Math.random()-0.5)*0.8,
+    vy:(Math.random()-0.5)*0.8,
+    size:1+Math.random()*2,
+    color:["#ff00ff","#00ffff","#ffff00","#ffffff"][Math.floor(Math.random()*4)]
   });
 }
+
+canvas.addEventListener("mousemove",e=>{
+  mouse.x=e.offsetX;
+  mouse.y=e.offsetY;
+});
 
 function animate(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
   particles.forEach(p=>{
-    p.y -= p.speed;
+    p.x+=p.vx;
+    p.y+=p.vy;
 
-    if(p.y < 0){
-      p.y = canvas.height;
-      p.x = Math.random()*canvas.width;
+    // mouse interaction
+    if(mouse.x){
+      let dx=p.x-mouse.x;
+      let dy=p.y-mouse.y;
+      let dist=Math.sqrt(dx*dx+dy*dy);
+
+      if(dist<100){
+        p.x+=dx/10;
+        p.y+=dy/10;
+      }
     }
+
+    // boundary
+    if(p.x<0||p.x>canvas.width)p.vx*=-1;
+    if(p.y<0||p.y>canvas.height)p.vy*=-1;
 
     ctx.beginPath();
     ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
-    ctx.fillStyle = p.color;
+    ctx.fillStyle=p.color;
     ctx.fill();
   });
 
