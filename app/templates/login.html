@@ -118,82 +118,154 @@ body{
   text-decoration:none;
 }
 
+/* RIGHT SIDE (NO CHANGE EXCEPT BG + ANIMATION) */
+
 .right{
   flex:1;
-  background:linear-gradient(135deg,#1e5cc4,#2d7bff);
-  color:white;
+  position:relative;
+  overflow:hidden;
   display:flex;
-  flex-direction:column;
   justify-content:center;
   align-items:center;
   text-align:center;
+  color:white;
 }
 
-.right h3{
-  margin-top:20px;
+/* EXACT IMAGE */
+.bg{
+  position:absolute;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:0;
 }
 
+/* PARTICLE CANVAS */
+canvas{
+  position:absolute;
+  width:100%;
+  height:100%;
+  z-index:1;
+}
+
+.text{
+  position:relative;
+  z-index:2;
+}
+
+/* SIGNATURE */
 .signature{
   position:absolute;
   bottom:10px;
   right:20px;
   font-size:12px;
-  color:gray;
+  color:#555;
+  letter-spacing:2px;
 }
 </style>
-
 </head>
+
 <body>
 
 <div class="container">
 
-  <!-- LEFT -->
-  <div class="left">
-    <div class="logo">dotwork</div>
+<!-- LEFT SAME -->
+<div class="left">
+<div class="logo">dotwork</div>
 
-    <h2>Log in to your Account</h2>
-    <p>Welcome back! Select method to log in:</p>
+<h2>Log in to your Account</h2>
+<p>Welcome back! Select method to log in:</p>
 
-    <div class="social">
-      <button>Google</button>
-      <button>Facebook</button>
-    </div>
+<div class="social">
+<button>Google</button>
+<button>Facebook</button>
+</div>
 
-    <div class="divider">or continue with email</div>
+<div class="divider">or continue with email</div>
 
-    <form method="POST">
-      <div class="input-box">
-        <input type="email" placeholder="Email" required>
-      </div>
+<form method="POST">
+<div class="input-box">
+<input type="email" placeholder="Email" required>
+</div>
 
-      <div class="input-box">
-        <input type="password" placeholder="Password" required>
-      </div>
+<div class="input-box">
+<input type="password" placeholder="Password" required>
+</div>
 
-      <div class="options">
-        <label><input type="checkbox"> Remember me</label>
-        <a href="#">Forgot Password?</a>
-      </div>
+<div class="options">
+<label><input type="checkbox"> Remember me</label>
+<a href="#">Forgot Password?</a>
+</div>
 
-      <button class="login-btn">Log in</button>
-    </form>
+<button class="login-btn">Log in</button>
+</form>
 
-    <div class="bottom">
-      Don’t have an account? <a href="/register">Create an account</a>
-    </div>
-  </div>
+<div class="bottom">
+Don’t have an account? <a href="/register">Create an account</a>
+</div>
+</div>
 
-  <!-- RIGHT -->
-  <div class="right">
-    <h3>Connect with every application.</h3>
-    <p>Everything you need in an easily customizable dashboard.</p>
-  </div>
+<!-- RIGHT SIDE -->
+<div class="right">
+
+<img src="{{ url_for('static', filename='bg.jpg') }}" class="bg">
+
+<canvas id="particles"></canvas>
+
+<div class="text">
+<h3>Connect with every application.</h3>
+<p>Everything you need in an easily customizable dashboard.</p>
+</div>
+
+</div>
 
 </div>
 
 <div class="signature">
-  Designed by Faiz
+🅳🅴🆂🅸🅶🅽🅴🅳 🅱🆈 🅵🅰🅸🆉
 </div>
+
+<script>
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
+
+let particles = [];
+
+for(let i=0;i<180;i++){
+  particles.push({
+    x: Math.random()*canvas.width,
+    y: canvas.height + Math.random()*200,
+    speed: 0.3 + Math.random()*1,
+    size: 1 + Math.random()*2,
+    color: ["#ff00ff","#00ffff","#ffff00","#ffffff"][Math.floor(Math.random()*4)]
+  });
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  particles.forEach(p=>{
+    p.y -= p.speed;
+
+    if(p.y < 0){
+      p.y = canvas.height;
+      p.x = Math.random()*canvas.width;
+    }
+
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.fillStyle = p.color;
+    ctx.fill();
+  });
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+</script>
 
 </body>
 </html>
