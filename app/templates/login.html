@@ -1,27 +1,29 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
 
-{% block title %}Login{% endblock %}
+<div class="container">
+    <div class="login-box">
+        <h2>Welcome Back 👋</h2>
+        <p>Login to your account</p>
 
-{% block content %}
-<section class="content">
-    <div class="intro">
-        <h2>Login</h2>
-        <p>Use your username and password to access your session-protected dashboard.</p>
+        <form method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <div class="extra">
+            <p>Don't have an account? <a href="/register">Register</a></p>
+        </div>
     </div>
+</div>
 
-    <form method="post" class="auth-form">
-        <label for="username">Username</label>
-        <input id="username" name="username" type="text" placeholder="Enter username" value="{{ form_data.username if form_data else '' }}" required>
-
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password" placeholder="Enter password" required>
-
-        <button type="submit">Login</button>
-    </form>
-
-    <p class="switch-link">
-        New here?
-        <a href="{{ url_for('main.register') }}">Create an account</a>
-    </p>
-</section>
-{% endblock %}
+</body>
+</html>
