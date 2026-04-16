@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<section class="content">
+    <div class="intro">
+        <h2>Register</h2>
+        <p>Create a new account. Passwords are hashed with Werkzeug before being stored in SQLite.</p>
+    </div>
+
+    <form method="post" class="auth-form">
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" placeholder="Choose a username" value="{{ form_data.username if form_data else '' }}" required>
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="At least 6 characters" required>
+
+        <label for="confirm_password">Confirm Password</label>
+        <input id="confirm_password" name="confirm_password" type="password" placeholder="Re-enter your password" required>
+
+        <button type="submit">Create Account</button>
+    </form>
+
+    <p class="switch-link">
+        Already registered?
+        <a href="{{ url_for('main.login') }}">Go to login</a>
+    </p>
+</section>
+{% endblock %}

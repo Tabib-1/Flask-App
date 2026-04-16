@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<section class="content">
+    <div class="intro">
+        <h2>Login</h2>
+        <p>Use your username and password to access your session-protected dashboard.</p>
+    </div>
+
+    <form method="post" class="auth-form">
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" placeholder="Enter username" value="{{ form_data.username if form_data else '' }}" required>
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="Enter password" required>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p class="switch-link">
+        New here?
+        <a href="{{ url_for('main.register') }}">Create an account</a>
+    </p>
+</section>
+{% endblock %}
